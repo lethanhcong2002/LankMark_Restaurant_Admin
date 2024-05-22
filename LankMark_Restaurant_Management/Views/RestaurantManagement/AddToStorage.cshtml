@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "AddToStorage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form id="inventory-form">
+    <input type="hidden" id="storageUrl" value="@Url.Action("Storage", "RestaurantManagement")" />
+
+    <div class="mb-3">
+        <label for="itemName" class="form-label">Tên vật dụng:</label>
+        <input type="text" class="form-control" id="itemName" name="itemName" required>
+    </div>
+    <div class="mb-3">
+        <label for="role" class="form-label">Vai trò:</label>
+        <select class="form-select" id="role" name="role" required>
+            <option value="" disabled selected>Chọn vai trò</option>
+            <option value="food">Thực phẩm</option>
+            <option value="spices">Gia vị</option>
+            <option value="instruments">Dụng cụ</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="quantity" class="form-label">Số lượng:</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" required>
+    </div>
+    <div class="mb-3">
+        <label for="minQuantity" class="form-label">Số lượng tối thiểu:</label>
+        <input type="number" class="form-control" id="minQuantity" name="minQuantity" required>
+    </div>
+    <div class="mb-3">
+        <label for="unit" class="form-label">Đơn vị tính:</label>
+        <select class="form-select" id="unit" name="unit" required>
+            <option value="" disabled selected>Chọn đơn vị tính</option>
+            <option value="kg">Kilogram (kg)</option>
+            <option value="l">Lít (l)</option>
+            <option value="piece">Cái (piece)</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Mô tả:</label>
+        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Ảnh vật dụng:</label>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-primary">Thêm vật dụng</button>
+</form>
+
+<style>
+        /* Style cho form */
+    #inventory-form {
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    /* Style cho các input và select */
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    /* Style cho textarea */
+    textarea {
+        resize: vertical;
+    }
+
+    /* Style cho nút submit */
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style cho tiêu đề form */
+    .form-label {
+        font-weight: bold;
+    }
+
+    /* Style cho thông báo lỗi */
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    /* Style cho phần tiêu đề */
+    .page-title {
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+</style>
+
+<script type="module" src="~/Scripts/js/firebase/firebaseHelper.js"></script>
+<script type="module" src="~/Scripts/js/firebase/storageManagement.js"></script>

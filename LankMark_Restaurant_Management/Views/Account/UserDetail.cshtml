@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewBag.Title = "UserDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Thông tin cá nhân</h2>
+<div id="userInfo" class="user-info">
+    <div class="info-item">
+        <label for="fullName">Họ và tên:</label>
+        <span id="fullName"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="email">Email:</label>
+        <span id="email"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="phoneNumber">Số điện thoại:</label>
+        <span id="phoneNumber"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="idCard">Căn cước công dân:</label>
+        <span id="idCard"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="salary">Lương:</label>
+        <span id="salary"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="jobPosition">Vị trí công việc:</label>
+        <span id="jobPosition"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="address">Địa chỉ:</label>
+        <span id="address"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="birthdate">Ngày sinh:</label>
+        <span id="birthdate"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="gender">Giới tính:</label>
+        <span id="gender"></span>
+    </div>
+
+    <div class="info-item">
+        <label for="bio">Giới thiệu bản thân:</label>
+        <span id="bio"></span>
+    </div>
+
+    <button id="updateInfoButton" onclick="updateUserInfo()">Cập nhật thông tin</button>
+</div>
+
+<div id="updateForm" class="updateForm">
+    <div id="updateForm" class="update-form">
+        <span class="close" onclick="closeForm('updateForm')">&times;</span>
+        <h2>Cập nhật thông tin cá nhân</h2>
+        <input hidden id="userKey" />
+        <div class="form-group">
+            <label for="updateFullName">Họ và tên:</label>
+            <input type="text" id="updateFullName" name="updateFullName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="updatePhoneNumber">Số điện thoại:</label>
+            <input type="number" id="updatePhoneNumber" name="updatePhoneNumber" required>
+        </div>
+
+        <div class="form-group">
+            <label for="updateIdCard">Căn cước công dân:</label>
+            <input type="number" id="updateIdCard" name="updateIdCard" required>
+        </div>
+
+        <div class="form-group">
+            <label for="updateAddress">Địa chỉ:</label>
+            <input type="text" id="updateAddress" name="updateAddress" required>
+        </div>
+
+        <div class="form-group">
+            <label for="updateBirthdate">Ngày sinh:</label>
+            <input type="date" id="updateBirthdate" name="updateBirthdate" required>
+        </div>
+
+        <div class="form-group">
+            <label for="updateGender">Giới tính:</label>
+            <select id="updateGender" class="updateGender" required>
+                <option value="Male">Nam</option>
+                <option value="Female">Nữ</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="updateBio">Giới thiệu bản thân:</label>
+            <textarea id="updateBio" name="updateBio" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="confirm-button" onclick="acceptUpdate()">Cập nhật</button>
+    </div>
+</div>
+
+
+<style>
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+    }
+    /**/
+    .user-info {
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-item {
+        margin-bottom: 15px;
+    }
+
+        .info-item label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .info-item span {
+            display: inline-block;
+            width: calc(100% - 150px);
+        }
+    /*update*/
+    .updateForm {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .update-form {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 100px;
+        border: 1px solid #888;
+        width: 75%;
+        max-width: 600px;
+        border-radius: 8px;
+        position: relative;
+    }
+
+        .update-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .update-form input[type="text"],
+        .update-form input[type="number"],
+        .update-form input[type="date"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+
+    .update-form .confirm-button {
+        width: calc(100% - 20px);
+        padding: 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+        .update-form .confirm-button:hover {
+            opacity: 1;
+        }
+    .updateGender, textarea {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+    }
+</style>
+
+<script>   
+</script>
+
+<script src="~/Scripts/js/firebase/firebaseHelper.js" type="module"></script>
+<script src="~/Scripts/js/firebase/userInfoManagement.js" type="module"></script>

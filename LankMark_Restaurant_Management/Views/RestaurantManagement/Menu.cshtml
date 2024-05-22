@@ -1,0 +1,231 @@
+﻿@{
+    ViewBag.Title = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="text-align: center; font-size: 24px; font-weight: bold;">MENU</div>
+<div class="table-actions">
+    <button id="addMenu">Thêm món</button>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Tên món</th>
+            <th>Price</th>
+            <th>Role</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody id="listMenu">
+
+    </tbody>
+</table>
+
+<div id="tableDetailModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeTableDetailModal()">&times;</span>
+        <div id="tableDetailContent">
+            <!-- Thông tin chi tiết của bàn và danh sách món ăn sẽ được thêm vào đây -->
+        </div>
+    </div>
+</div>
+
+<div class="updateDetail" id="updateDetail">
+    <form class="update-detail" id="update-detail">
+        <input hidden id="inputMenuKey" />
+        <label for="inputFoodName" class="form-label">Tên món:</label>
+        <input type="text" id="inputFoodName" name="inputFoodName" required class="form-control"><br>
+        <label for="inputfoodPrice" class="form-label">Giá:</label>
+        <input type="number" id="inputfoodPrice" name="inputfoodPrice" required class="form-control"><br>
+        <label for="inputFoodDescription" class="form-label">Mô tả:</label>
+        <textarea class="form-control" id="inputFoodDescription" name="inputFoodDescription" required></textarea><br>
+        <label for="imageFood" class="form-label">Hình ảnh:</label>
+        <input type="file" class="form-control" id="imageFood" name="imageFood" accept="image/*" required><br>
+        <label for="role" class="form-label">Loại món:</label>
+        <select class="form-select" id="role" name="role" required>
+            <option value="" selected disabled>Chọn loại món</option>
+            <option value="Món chính">Món chính</option>
+            <option value="Khai vị">Khai vị</option>
+            <option value="Tráng miệng">Tráng miệng</option>
+            <option value="Nước">Nước</option>
+        </select><br />
+
+        <input type="button" class="confirm-button" value="Xác Nhận" onclick="confirmUpdate()">
+        <input type="button" class="cancel-button" value="Hủy" onclick="closeUpdateForm()">
+    </form>
+</div>
+<style>
+    .table-actions {
+        margin-bottom: 20px;
+    }
+
+        .table-actions button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+            .table-actions button:hover {
+                background-color: #0056b3;
+            }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    td button {
+        padding: 6px 10px;
+        margin-right: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 14px;
+    }
+
+        td button:hover {
+            background-color: #45a049;
+        }
+
+    /*modal*/
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 100px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        max-width: 600px; /* Giới hạn kích thước tối đa */
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+    }
+
+    #tableDetailContent {
+        max-width: 100%;
+        display: block;
+    }
+
+    #tableDetailContent img {
+        /* Thiết lập kích thước và căn chỉnh cho hình ảnh */
+        max-width: 100%;
+        max-height: 400px; /* Điều chỉnh kích thước tối đa của hình ảnh */
+        display: block;
+        margin: 0 auto; /* Căn chỉnh hình ảnh vào giữa */
+    }
+
+    /*UpdateDetail*/
+    .updateDetail {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .update-detail {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 100px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        max-width: 600px; /* Giới hạn kích thước tối đa */
+        border-radius: 8px;
+        position: relative; /* Đảm bảo modal hiển thị trên sidebar */
+    }
+
+    .update-detail label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .update-detail input[type="text"],
+    .update-detail input[type="number"],
+    .update-detail input[type="file"] {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .update-detail .confirm-button {
+        width: calc(50% - 10px);
+        padding: 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    .update-detail .cancel-button {
+        width: calc(50% - 10px);
+        padding: 10px;
+        background-color: #FF5733;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    .update-detail .confirm-button:hover,
+    .update-detail .cancel-button:hover {
+        opacity: 1;
+    }
+</style>
+
+<script type="module" src="~/Scripts/js/firebase/firebaseHelper.js"></script>
+<script type="module" src="~/Scripts/js/firebase/menuManagement.js"></script>
+
+<script>
+    document.getElementById('addMenu').addEventListener('click', function() {
+        var url = '@Url.Action("AddToMenu", "RestaurantManagement")';
+        window.location.href = url;
+    });
+</script>

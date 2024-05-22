@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "AddToMenu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form id="menu-form">
+    <div class="mb-3">
+        <label for="foodName" class="form-label">Tên món ăn:</label>
+        <input type="text" class="form-control" id="foodName" name="foodName" placeholder="Nhập tên món ăn" required>
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Giá:</label>
+        <input type="number" class="form-control" id="price" name="price" placeholder="Nhập giá món ăn" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Mô tả:</label>
+        <textarea class="form-control" id="description" name="description" placeholder="Nhập mô tả về món ăn" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="imageFood" class="form-label">Hình ảnh:</label>
+        <input type="file" class="form-control" id="imageFood" name="imageFood" accept="image/*" required>
+    </div>
+    <input type="hidden" id="menuUrl" value="@Url.Action("Menu", "RestaurantManagement")" />
+    <div class="mb-3">
+        <label for="role" class="form-label">Loại món:</label>
+        <select class="form-select" id="role" name="role" required>
+            <option value="" selected disabled>Chọn loại món</option>
+            <option value="Món chính">Món chính</option>
+            <option value="Khai vị">Khai vị</option>
+            <option value="Tráng miệng">Tráng miệng</option>
+            <option value="Nước">Nước</option>
+        </select>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="confirmAdd()">Thêm món ăn</button>
+</form>
+
+<style>
+    /* Định dạng các thành phần của form */
+    .form-control {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    /* Định dạng nút */
+    .btn {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    .form-select {
+        padding: 8px 12px; /* Khoảng cách giữa nội dung và viền của select */
+        font-size: 16px; /* Cỡ chữ */
+        border-radius: 5px; /* Bo tròn viền */
+        border: 1px solid #ccc; /* Viền */
+    }
+
+        /* Tạo hiệu ứng khi hover */
+        .form-select:hover {
+            border-color: #aaa; /* Màu viền khi di chuột qua */
+        }
+
+        /* Tạo hiệu ứng khi focus */
+        .form-select:focus {
+            border-color: #4CAF50; /* Màu viền khi được chọn */
+            outline: none; /* Loại bỏ đường viền khi focus */
+        }
+
+        /* Tùy chỉnh các option */
+        .form-select option {
+            background-color: #fff; /* Màu nền của option */
+            color: #333; /* Màu chữ của option */
+            border-bottom: 1px solid #ccc; /* Tạo border dưới */
+        }
+
+            /* Tùy chỉnh khi hover lên các option */
+            .form-select option:hover {
+                background-color: #f4f4f4; /* Màu nền khi hover */
+            }
+
+            /* Tùy chỉnh khi option được chọn */
+            .form-select option:checked {
+                background-color: #4CAF50; /* Màu nền khi được chọn */
+                color: #fff; /* Màu chữ khi được chọn */
+            }
+
+        /* Tùy chỉnh style của dropdown arrow */
+        .form-select::-ms-expand {
+            display: none; /* Ẩn dropdown arrow trên Edge và IE */
+        }
+
+        .form-select::after {
+            content: "\25BC"; /* Sử dụng một ký tự down-arrow */
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            pointer-events: none; /* Ngăn sự kiện click vào arrow */
+        }
+</style>
+
+<script type="module" src="~/Scripts/js/firebase/firebaseHelper.js"></script>
+<script type="module" src="~/Scripts/js/firebase/addMenu.js"></script>

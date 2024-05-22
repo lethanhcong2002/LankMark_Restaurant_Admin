@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "OrderFood";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách các bàn đã nhận bàn</h2>
+<div class="btn-group" style="float: right;">
+    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="nameButton">
+        Sắp xếp
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="javascript:void(0);">Tất cả</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0);">Chưa thanh toán</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0);">Đã thanh toán</a></li>
+    </ul>
+</div>
+<br /><br />
+<div class="card">
+    <h5 class="card-header">Danh sách đặt bàn</h5>
+    <div class="text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Tên khách hàng</th>
+                    <th>Thời gian nhận bàn</th>
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0" id="receivedTablesBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal để hiển thị menu -->
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document" style="max-width: 75%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalScrollableTitle">Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-header">
+                <div class="input-group input-group-merge" style="width: 30%;">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search..." aria-label="Search..." aria-describedby="basic-addon-search31" id="searchInput">
+                </div>
+            </div>
+
+            <div class="modal-body" id="addMenu">
+
+            </div>
+            <hr />
+            <div style="padding-left: 24px">
+                <h5 class="modal-title" id="modalScrollableTitle">Danh sách món ăn</h5>
+                <ul id="listMenu">
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="closeMenuButton">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" id="confirmTakeTable" onclick="confirmMenu()">Đặt món</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Detail-->
+<div class="modal fade" id="tableDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông tin hóa đơn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="tableDetailContent">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="closeDetailModal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="confirmPayment" onclick="billPayment()">Thanh toán</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Script-->
+<script src="~/Scripts/js/firebase/firebaseHelper.js" type="module"></script>
+<script src="~/Scripts/js/firebase/orderFood.js" type="module"></script>

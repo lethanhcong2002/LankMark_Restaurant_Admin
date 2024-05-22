@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "AddNewStaff";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form id="signup-form">
+
+    <label for="fullName">Tên nhân viên:</label><br>
+    <input type="text" id="fullName" name="fullName" required><br>
+
+    <label for="emailAddress">Email:</label><br>
+    <input type="email" id="emailAddress" name="emailAddress" required><br>
+
+    <label for="password">Mật khẩu:</label><br>
+    <input type="text" id="password" name="password" readonly value="12345678"><br>
+
+    <label for="phoneNumber">Số điện thoại:</label><br>
+    <input type="number" id="phoneNumber" name="phoneNumber" required><br>
+
+    <label for="idCard">Căn cước công dân:</label><br>
+    <input type="number" id="idCard" name="idCard" required><br>
+
+    <input type="hidden" id="targetUrl" value="@Url.Action("ListStaff", "StaffManagement")" />
+
+    <label for="userType">Loại nhân viên:</label><br>
+    <select id="userType" name="userType">
+        <option value="Admin">Admin</option>
+        <option value="Manager">Manager</option>
+        <option value="Staff">Staff</option>
+    </select><br>
+
+    <label for="salary">Lương:</label><br>
+    <input type="number" id="salary" name="salary" required><br>
+
+    <input type="submit" value="Tạo tài khoản">
+</form>
+<script type="module" src="~/Scripts/js/firebase/firebaseHelper.js"></script>
+<script src="~/Scripts/js/firebase/signUp.js" type="module"></script>
+<style>
+    h2 {
+        text-align: center;
+    }
+
+    form {
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"],
+    select,
+    input[type="number"],
+    input[type="file"],
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+    }
+
+    select {
+        height: 40px; /* Đảm bảo chiều cao đồng đều với các input */
+    }
+
+    input[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+    input[type="file"] {
+        border: none;
+        background-color: transparent;
+    }
+
+        input[type="file"]::-webkit-file-upload-button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+            input[type="file"]::-webkit-file-upload-button:hover {
+                background-color: #45a049;
+            }
+</style>
+

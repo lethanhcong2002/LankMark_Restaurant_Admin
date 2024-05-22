@@ -1,0 +1,128 @@
+﻿<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="@Url.Action("HomeScreen", "Home")" class="app-brand-link">
+            <span style="font-size: 18px; color: #333; font-weight: bold;">LankMark Restaurant</span>
+        </a>
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+    <div class="menu-inner-shadow"></div>
+    <ul class="menu-inner py-1">
+        <!-- Home -->
+        <li class="menu-item">
+            <a href="@Url.Action("HomeScreen", "Home")" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Home</div>
+            </a>
+        </li>
+        <!-- Quản lý đặt bàn -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">Quản lý đặt bàn</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="@Url.Action("ListReservationScreen", "Reservation")" class="menu-link">
+                        <div data-i18n="Without menu">Đặt bàn</div>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a href="@Url.Action("OrderFood", "Reservation")" class="menu-link">
+                        <div data-i18n="Without navbar">Đặt món</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!-- Quản lý nhà hàng-->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account Settings">Quản lý nhà hàng</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="@Url.Action("Menu", "RestaurantManagement")" class="menu-link">
+                        <div data-i18n="Account">Quản lý menu món</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="@Url.Action("Storage", "RestaurantManagement")" class="menu-link">
+                        <div data-i18n="Notifications">Quản lý kho hàng</div>
+                    </a>
+                </li>
+                <li class="menu-item admin-menu-item">
+                    <a href="@Url.Action("SupplierManagement", "RestaurantManagement")" class="menu-link">
+                        <div data-i18n="Notifications">Quản lý nguồn nhập hàng</div>
+                    </a>
+                </li>
+                <li class="menu-item admin-menu-item">
+                    <a href="@Url.Action("ImportProductManagement", "RestaurantManagement")" class="menu-link">
+                        <div data-i18n="Notifications">Quản lý nhập hàng</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <!-- Thống kê-->
+        <li class="menu-item">
+            <a href="@Url.Action("Statistics", "Statistics")" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                <div data-i18n="Misc">Thống kê</div>
+            </a>
+        </li>
+        <!-- Quản lý nhân viên -->
+        <li class="menu-item admin-menu-item">
+            <a href="@Url.Action("ListStaff", "StaffManagement")" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                <div data-i18n="Authentications">Quản lý nhân viên</div>
+            </a>
+        </li>
+        <!--Thông báo-->
+        <li class="menu-item admin-menu-item">
+            <a href="@Url.Action("Notification", "Notification")" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                <div data-i18n="Authentications">Thông báo</div>
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<script>
+    $(document).ready(function () {
+        var currentUrl = window.location.href;
+        $(".menu-item").each(function () {
+            var menuUrl = $(this).find("a").attr("href");
+            if (menuUrl && currentUrl.includes(menuUrl)) {
+                $(this).addClass("active");
+                $(this).parents(".menu-item").addClass("active");
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const userDataJSON = sessionStorage.getItem('userData');
+
+        if (!userDataJSON) {
+            window.location.href = '@Url.Action("SignIn", "Account")';
+            return;
+        }
+
+        const userData = JSON.parse(userDataJSON);
+        const position = userData.userType;
+
+        if (position === 'Staff') {
+            hideAdminMenuItems();
+        }
+    });
+
+    function hideAdminMenuItems() {
+        // Select elements corresponding to menu items not allowed for Staff
+        const adminMenuItems = document.querySelectorAll('.admin-menu-item');
+
+        // Hide the admin menu items
+        adminMenuItems.forEach(function (element) {
+            element.style.display = 'none';
+        });
+    }
+</script>

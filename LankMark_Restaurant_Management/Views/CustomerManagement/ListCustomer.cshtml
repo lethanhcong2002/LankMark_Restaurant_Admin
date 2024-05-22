@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "ListCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="text-align: center; font-size: 24px; font-weight: bold;">DANH SÁCH KHÁCH HÀNG</div>
+<table id="userTable">
+    <thead>
+        <tr>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Các dòng dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+    </tbody>
+</table>
+
+<style>
+    #userTable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        #userTable th,
+        #userTable td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        #userTable th {
+            background-color: #f2f2f2;
+        }
+
+        #userTable tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #userTable tbody tr:hover {
+            background-color: #f2f2f2;
+        }
+
+    .actions {
+        display: flex;
+        justify-content: space-around;
+    }
+
+        .actions button {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+
+            .actions button:hover {
+                background-color: #0056b3;
+            }
+</style>
+

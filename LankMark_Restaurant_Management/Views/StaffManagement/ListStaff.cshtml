@@ -1,0 +1,202 @@
+﻿@{
+    ViewBag.Title = "ListStaff";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Danh sách nhân viên</h2>
+<div class="button-actions">
+    <button id="addNew" onclick="redirectToNewStaff()">Nhân viên mới</button>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Vị trí công việc</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody id="employeeTable">
+    </tbody>
+</table>
+<!--Chi tiet-->
+<div id="tableDetailModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeForm('tableDetailModal')">&times;</span>
+        <div id="tableDetailContent">
+            <!-- Thông tin chi tiết của bàn và danh sách món ăn sẽ được thêm vào đây -->
+        </div>
+    </div>
+</div>
+<!--Dieu chinh luong-->
+<div class="updateDetail" id="updateDetail">
+    <form class="update-detail" id="update-detail">
+        <input hidden id="inputKey" />
+        <label for="inputName" class="form-label">Tên người dùng:</label>
+        <input type="text" class="form-control" id="inputName" name="inputName" readonly><br>
+
+        <label for="oldSalary" class="form-label">Lương cũ:</label>
+        <input type="number" class="form-control" id="oldSalary" name="oldSalary" readonly><br>
+
+        <label for="newSalary" class="form-label">Lương cũ:</label>
+        <input type="number" class="form-control" id="newSalary" name="newSalary" required><br>
+
+        <input type="button" class="confirm-button" value="Xác Nhận" onclick="confirmUpdate()">
+        <input type="button" class="cancel-button" value="Hủy" onclick="closeForm('updateDetail')">
+    </form>
+</div>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    td:last-child {
+        white-space: nowrap;
+    }
+
+    td button {
+        padding: 6px 10px;
+        margin-right: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 14px;
+    }
+
+    td button:hover {
+        background-color: #45a049;
+    }
+    /* Button styles */
+    .button-actions {
+        margin-bottom: 20px;
+    }
+
+    .button-actions button {
+        padding: 8px 16px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+    }
+
+    .button-actions button:hover {
+        background-color: #0056b3;
+    }
+    /*Modal*/
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        top: 100px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        max-width: 600px; /* Giới hạn kích thước tối đa */
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+    }
+    /*update*/
+    .updateDetail {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .update-detail {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 100px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        max-width: 600px; /* Giới hạn kích thước tối đa */
+        border-radius: 8px;
+        position: relative; /* Đảm bảo modal hiển thị trên sidebar */
+    }
+
+    .update-detail label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .update-detail input[type="text"],
+    .update-detail input[type="number"],
+    .update-detail input[type="file"] {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .update-detail .confirm-button {
+        width: calc(50% - 10px);
+        padding: 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    .update-detail .cancel-button {
+        width: calc(50% - 10px);
+        padding: 10px;
+        background-color: #FF5733;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    .update-detail .confirm-button:hover,
+    .update-detail .cancel-button:hover {
+        opacity: 1;
+    }
+</style>
+<script src="~/Scripts/js/firebase/firebaseHelper.js" type="module"></script>
+<script src="~/Scripts/js/firebase/staffManagement.js" type="module"></script>
+
+<script>
+    function redirectToNewStaff() {
+        window.location.href = '@Url.Action("AddNewStaff", "StaffManagement")';
+    }
+</script>

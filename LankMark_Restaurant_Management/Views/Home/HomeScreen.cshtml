@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "HomeScreen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Thông tin trong ngày</h2>
+<div class="row">
+    <div class="col-lg-4 col-md-12 col-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <span class="d-block mb-1">Số bàn đã đặt</span>
+                <h3 class="card-title text-nowrap mb-2" id="countBooking"></h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-12 col-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <span class="d-block mb-1">Số bàn chưa thanh toán</span>
+                <h3 class="card-title text-nowrap mb-2" id="countPayment"></h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-12 col-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <span class="d-block mb-1">Số lượng hủy đặt bàn</span>
+                <h3 class="card-title text-nowrap mb-2" id="countCancel"></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h5 class="card-header">Danh sách đặt bàn</h5>
+    <div class="text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Khách hàng</th>
+                    <th>Thời gian nhận bàn</th>
+                    <th>Số người</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0" id="listTable">
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+<div class="card">
+    <h5 class="card-header">Danh sách chưa thanh toán</h5>
+    <div class="text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Khách hàng</th>
+                    <th>Thời gian nhận bàn</th>
+                    <th>Số người</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0" id="listInvoice">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="~/Scripts/js/firebase/firebaseHelper.js" type="module"></script>
+<script src="~/Scripts/js/firebase/home.js" type="module"></script>

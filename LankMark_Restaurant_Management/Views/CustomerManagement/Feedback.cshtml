@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="text-align: center; font-size: 24px; font-weight: bold;">PHẢN HỒI</div>
+<table id="feedbackTable">
+    <thead>
+        <tr>
+            <th>Tên Khách Hàng</th>
+            <th>Tên Nhân Viên</th>
+            <th>Thời gian</th>
+            <th>Trạng thái phản hồi</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Các dòng dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+    </tbody>
+</table>
+
+<style>
+    #feedbackTable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        #feedbackTable th,
+        #feedbackTable td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        #feedbackTable th {
+            background-color: #f2f2f2;
+        }
+
+        #feedbackTable tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #feedbackTable tbody tr:hover {
+            background-color: #f2f2f2;
+        }
+
+    .status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .status-pending {
+        background-color: #ffc107; /* Màu vàng */
+    }
+
+    .status-responded {
+        background-color: #28a745; /* Màu xanh lá cây */
+    }
+
+    .status-closed {
+        background-color: #dc3545; /* Màu đỏ */
+    }
+</style>
+

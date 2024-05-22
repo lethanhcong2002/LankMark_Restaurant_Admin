@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "Notification";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Thông báo</h2>
+<div class="table-actions">
+    <button id="addNotificationBtn" onclick="createNotification()">Tạo thông báo</button>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Thời gian gửi</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody id="notificationTable">
+    </tbody>
+</table>
+
+<div class="inputForm" id="inputForm">
+    <div class="input-content">
+        <span class="close" onclick="closeForm('inputForm')">&times;</span>
+        <form id="notificationForm">
+            <label for="notificationType">Notification Type:</label>
+            <select id="notificationType" onchange="updateForm()">
+                <option value="" disabled selected hidden>Chọn loại thông báo</option>
+                <option value="holiday">Thông báo nghỉ lễ</option>
+                <option value="meeting">Thông báo cuộc họp</option>
+            </select><br>
+
+            <label for="title">Tiêu đề:</label>
+            <input type="text" id="title" required><br>
+
+            <label for="content">Nội dung:</label>
+            <textarea id="content" required></textarea><br>
+
+            <button type="button" onclick="addNotification()" class="confirm-button" id="saveNotification">Gửi</button>
+        </form>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/js/firebase/firebaseHelper.js" type="module"></script>
+<script src="~/Scripts/js/firebase/notificationManagement.js" type="module"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    td button {
+        padding: 6px 10px;
+        margin-right: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 14px;
+    }
+
+        td button:hover {
+            background-color: #45a049;
+        }
+
+    /* Button styles */
+    .table-actions {
+        margin-bottom: 20px;
+    }
+
+        .table-actions button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+            .table-actions button:hover {
+                background-color: #0056b3;
+            }
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+    }
+    /* Form */
+    .inputForm {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .input-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 25px;
+        border: 1px solid #888;
+        width: 90%;
+        border-radius: 8px;
+        position: relative;
+    }
+
+        .input-content label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .input-content input[type="text"],
+        select,
+        textarea{
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            height: 600px;
+        }
+
+        .input-content .confirm-button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+            .input-content .confirm-button:hover {
+                opacity: 1;
+            }
+</style>

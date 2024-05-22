@@ -1,0 +1,364 @@
+﻿
+@{
+    ViewBag.Title = "SupplierManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Danh sách nhà cung cấp</h3>
+<div class="table-actions">
+    <button id="storageButton" onclick="addSupplier()">Thêm nhà cung cấp</button>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Số điện thoại</th>
+            <th>Địa chỉ</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody id="listSupplier">
+    </tbody>
+</table>
+
+
+
+<!--Add New Form-->
+<div class="inputForm" id="inputForm">
+    <div class="inputForm-content">
+        <h3>Nhập thông tin nhà cung cấp vật tư</h3>
+        <span class="close" onclick="closeForm('inputForm')">&times;</span>
+        <form id="supplierForm">
+            <label for="inputSupplierName">Tên nhà cung cấp:</label>
+            <input type="text" id="inputSupplierName" required><br>
+
+            <label for="inputAddress">Địa chỉ:</label>
+            <input type="text" id="inputAddress" required><br>
+
+            <label for="inputPhoneNumber">Số điện thoại:</label>
+            <input type="number" id="inputPhoneNumber" required ><br>
+
+            <label for="inputEmail">Email:</label>
+            <input type="email" id="inputEmail" required><br>
+
+            <label for="inputDescription">Mô tả:</label>
+            <textarea id="inputDescription" placeholder="mô tả sơ bộ về nhà cung cấp"></textarea><br>
+
+            <button type="submit" class="confirm-button" onclick="confirmAdd()">Lưu</button>
+        </form>
+    </div>
+</div>
+
+
+<div class="inputForm" id="updateForm">
+    <div class="inputForm-content">
+        <h3>Cập nhật thông tin nhà cung cấp vật tư</h3>
+        <span class="close" onclick="closeForm('updateForm')">&times;</span>
+        <form id="supplierForm">
+            <input id="inputKey" hidden />
+
+            <label for="updateSupplierName">Tên nhà cung cấp:</label>
+            <input type="text" id="updateSupplierName" required><br>
+
+            <label for="updateAddress">Địa chỉ:</label>
+            <input type="text" id="updateAddress" required><br>
+
+            <label for="updatePhoneNumber">Số điện thoại:</label>
+            <input type="number" id="updatePhoneNumber" required><br>
+
+            <label for="updateEmail">Email:</label>
+            <input type="email" id="updateEmail" required><br>
+
+            <label for="updateDescription">Mô tả:</label>
+            <textarea id="updateDescription" placeholder="mô tả sơ bộ về nhà cung cấp"></textarea><br>
+
+            <button type="submit" class="confirm-button" onclick="confirmUpdate()">Sửa</button>
+        </form>
+    </div>
+</div>
+
+<div id="tableDetailModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeForm('tableDetailModal')">&times;</span>
+        <div id="tableDetailContent">
+             Thông tin chi tiết của bàn và danh sách món ăn sẽ được thêm vào đây 
+        </div>
+    </div>
+</div>
+
+
+<div id="addSupplierProducts" class="modal">
+    <div class="modal-content">
+        <input type="text" hidden id="inputSupplierKey">
+        <span class="close" onclick="closeForm('addSupplierProducts')">&times;</span>
+        <h2 id="supplierName">Danh sách sản phẩm của </h2>
+        <div id="menuControls">
+            <input type="text" placeholder="Tìm kiếm..." id="searchInput">
+        </div>
+        <table id="menuItemsTable">
+            <thead>
+                <tr>
+                    <th hidden>ProductKey</th>
+                    <th>Tên</th>
+                    <th>Giá</th>
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
+            <tbody id="menuItems"></tbody>
+        </table>
+        <br />
+        <h4>Danh sách sản phẩm của nhà cung cấp</h4>
+        <ul id="listSupplierProducts">
+        </ul>
+        <button onclick="confirmSupplierProducts()" class="confirm-button">Xác nhận</button>
+    </div>
+</div>
+<style>
+
+    .table-actions {
+        margin-bottom: 20px;
+    }
+
+        .table-actions button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+            .table-actions button:hover {
+                background-color: #0056b3;
+            }
+    /*list*/
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    td button {
+        padding: 6px 10px;
+        margin-right: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 14px;
+    }
+
+        td button:hover {
+            background-color: #45a049;
+        }
+
+    /*Form Add New*/
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+    }
+
+    .inputForm {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .inputForm-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 100px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        max-width: 600px; /* Giới hạn kích thước tối đa */
+        border-radius: 8px;
+        position: relative; /* Đảm bảo modal hiển thị trên sidebar */
+    }
+
+        .inputForm-content label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .inputForm-content input[type="text"],
+        .inputForm-content input[type="number"],
+        .inputForm-content input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .inputForm-content .confirm-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+            .inputForm-content .confirm-button:hover {
+                opacity: 1;
+            }
+
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+    }
+    /**/
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        top: 100px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        max-width: 600px; /* Giới hạn kích thước tối đa */
+        border-radius: 8px;
+        position: relative;
+    }
+
+    #tableDetailContent {
+        max-width: 100%;
+        display: block;
+    }
+    /*addProduct*/
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed;
+        z-index: 1000;
+        padding: 20px;
+        border: 1px solid #888;
+        max-width: 90%;
+        max-height: 90%;
+        overflow-y: auto;
+        border-radius: 8px;
+    }
+
+    #menuItemsTable {
+        width: 100%;
+        max-width: 100%;
+        border-collapse: collapse;
+        overflow-x: auto;
+    }
+
+        #menuItemsTable th, #menuItemsTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #menuItemsTable th {
+            background-color: #f2f2f2;
+        }
+    #menuControls {
+        margin-bottom: 20px;
+    }
+
+        #menuControls input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        #menuControls button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            #menuControls button:hover {
+                background-color: #45a049;
+            }
+
+    #listMenu {
+        list-style: none;
+        padding: 0;
+    }
+
+        #listMenu li {
+            padding: 5px 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+    .confirm-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .confirm-button:hover {
+            background-color: #45a049;
+        }
+</style>
+<script src="~/Scripts/js/firebase/firebaseHelper.js" type="module"></script>
+<script src="~/Scripts/js/firebase/supplierManagement.js" type="module"></script>

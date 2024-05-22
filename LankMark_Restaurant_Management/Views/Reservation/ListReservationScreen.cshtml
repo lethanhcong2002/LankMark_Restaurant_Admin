@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "ListReservationScreen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/js/firebase/firebaseHelper.js" type="module"></script>
+<script src="~/Scripts/js/firebase/listReservation.js" type="module"></script>
+<div style="text-align: center; font-size: 24px; font-weight: bold;">ĐẶT BÀN</div>
+<button type="button"
+        class="btn btn-outline-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#bookingForm">
+    Đặt bàn
+</button>
+<div class="btn-group" style="float: right">
+    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="nameButton">
+        Sắp xếp
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="javascript:void(0);">Tất cả</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0);">Còn hoạt động</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0);">Đã hết hạn</a></li>
+
+    </ul>
+</div>
+<br/><br />
+<div class="card">
+    <h5 class="card-header">Danh sách đặt bàn</h5>
+    <div class="text-nowrap">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Khách hàng</th>
+                    <th>Thời gian nhận bàn</th>
+                    <th>Số người</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0" id="listTable">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--Detail Reservation-->
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true" style="max-width: auto;">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalScrollableTitle">Thông tin đặt bàn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detailReservation">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="closeModalButton">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" id="confirmTakeTable" onclick="confirmReservation()">Nhận bàn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Form Reservation-->
+<div class="modal fade" id="bookingForm" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="booking-form">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Đặt bàn</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close" id="closeInputForm"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+
+                            <label for="customerName" class="form-label">Tên khách hàng:</label>
+                            <input type="text" id="inputCustomerName" name="inputCustomerName" class="form-control" required />
+
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col mb-0">
+
+                            <label for="phoneNumber" class="form-label">Số điện thoại:</label>
+                            <input type="tel" id="inputPhoneNumber" name="inputPhoneNumber" class="form-control" minlength="10" required />
+
+                        </div>
+
+                        <div class="col mb-0">
+
+                            <label for="idCard" class="form-label">Căn cước:</label>
+                            <input type="text" id="inputIdCard" name="inputIdCard" class="form-control" minlength="10" required />
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+
+                            <label for="bookingDate" class="form-label">Ngày đặt:</label>
+                            <input type="datetime-local" id="inputPickupDate" name="inputPickupDate" class="form-control" required />
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+
+                            <label for="numberOfPeople" class="form-label">Số người dự kiến:</label>
+                            <input type="number" id="inputNumberOfPeople" name="inputNumberOfPeople" class="form-control" required min="1"/>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="closeInputForm">
+                        Đóng
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="confirmBooking()">Đặt bàn</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

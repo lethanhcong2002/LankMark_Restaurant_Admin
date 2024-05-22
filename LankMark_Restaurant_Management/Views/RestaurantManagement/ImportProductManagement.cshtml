@@ -1,0 +1,317 @@
+﻿
+@{
+    ViewBag.Title = "ImportProductManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Quản lý hóa đơn nhập kho</h2>
+<button type="button"
+        class="btn btn-outline-primary" onclick="addNew()">
+    Lập hóa đơn
+</button>
+<div class="btn-group" style="float: right;">
+    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="nameButton">
+        Chưa nhận hàng
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="javascript:void(0);">Tất cả</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0);">Chưa nhận hàng</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0);">Đã nhận hàng</a></li>
+    </ul>
+</div>
+<br />
+<br />
+
+<table>
+    <thead>
+        <tr>
+            <th>Ngày</th>
+            <th>Nhà cung cấp</th>
+            <th>Trạng thái</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody id="listItem">
+    </tbody>
+</table>
+
+<div class="inputForm" id="inputForm">
+    <div class="inputForm-content">
+        <h3>Cập nhật thông tin nhà cung cấp vật tư</h3>
+        <span class="close" onclick="closeForm('inputForm')">&times;</span>
+        <form id="importProductForm">
+            <label for="supplier">Chọn nhà cung cấp:</label>
+            <select id="supplier" name="supplier">
+            </select>
+            <br><br>
+
+            <h2>Danh sách sản phẩm</h2>
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <br>
+
+            <h2>Danh sách sản phẩm đã chọn</h2>
+            <ul id="selectedProducts">
+            </ul>
+            <br>
+
+            <button type="submit" onclick="confirmAdd()" class="confirm-button">Xác nhận</button>
+        </form>
+    </div>
+</div>
+
+<div id="tableDetailModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeForm('tableDetailModal')">&times;</span>
+        <div id="supllierInfo">
+        </div>
+        <div id="tableDetailContent">
+            <table>
+                <thead>
+                    <tr id="reality" style="display: none;">
+                        <th></th>
+                        <th colspan="2">Dự kiến</th>
+                        <th colspan="2">Thực tế</th>
+                    </tr>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Tổng tiền</th>
+                        <th id="realityQuantity">Số lượng</th>
+                        <th id="realityPrice">Tổng tiền</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableDetail">
+                </tbody>
+            </table>
+            <br />
+            <span style="float: right;" id="totalAmount"></span>
+        </div>
+        <button id="btnSubmit" onclick="acceptSendMail()" style="display: none">Xác nhận</button>
+    </div>
+</div>
+
+
+<div class="modal" id="receivedProduct">
+    <div class="modal-content">
+        <input hidden id="orderKey" />
+        <span class="close" onclick="closeForm('receivedProduct')">&times;</span>
+        <div id="detailOrder"></div>
+        <table id="receivedOrderTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th colspan="2">Dự kiến</th>
+                    <th colspan="2">Thực tế</th>
+                </tr>
+                <tr>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Số Lượng</th>
+                    <th>Giá Tiền</th>
+                    <th>Số Lượng</th>
+                    <th>Giá Tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <br />
+        <div id="totalAmountProduct"></div>
+        <button type="button" onclick="acceptReceivedProduct()">Xác nhận</button>
+    </div>
+</div>
+
+<style>
+    #importProductForm {
+        margin-bottom: 20px;
+    }
+
+    /* Label style */
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Select style */
+    select {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        transition: border-color 0.3s ease;
+    }
+
+        /* Select focus style */
+        select:focus {
+            outline: none;
+            border-color: #66afe9;
+        }
+
+    /* Table style */
+    .table-actions {
+        margin-bottom: 20px;
+    }
+
+        .table-actions button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+            .table-actions button:hover {
+                background-color: #0056b3;
+            }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    td button {
+        padding: 6px 10px;
+        margin-right: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 14px;
+    }
+
+        td button:hover {
+            background-color: #45a049;
+        }
+
+    /* Button style */
+    button[type="submit"] {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+    }
+
+    .inputForm {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .inputForm-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 50px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        border-radius: 8px;
+        position: relative; /* Đảm bảo modal hiển thị trên sidebar */
+    }
+
+        .inputForm-content label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .inputForm-content input[type="text"],
+        .inputForm-content input[type="number"],
+        .inputForm-content input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .inputForm-content .confirm-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+            .inputForm-content .confirm-button:hover {
+                opacity: 1;
+            }
+
+    /* List style */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 100px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+    }
+</style>
+<script src="~/Scripts/js/firebase/firebaseHelper.js" type="module"></script>
+<script src="~/Scripts/js/firebase/importProductManagement.js" type="module"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>

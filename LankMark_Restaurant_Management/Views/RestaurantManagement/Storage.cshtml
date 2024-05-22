@@ -1,0 +1,359 @@
+﻿@{
+    ViewBag.Title = "Storage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>KHO HÀNG</h2>
+<div class="table-actions">
+    <button id="storageButton" onclick="addStorage()">Thêm vào kho</button>
+    <button style="float: right" onclick="checkItem()">Kiểm tra hàng hóa</button>
+</div>
+<input type="file" id="excelInput" accept=".xls,.xlsx" style="display:none" onchange="handleFileInput()">
+<table>
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Loại</th>
+            <th>Số lượng</th>
+            <th>Tối thiểu</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody id="listStorage">
+    </tbody>
+</table>
+
+<div id="addNewDataFromExcel">
+    <div class="addNewDataFromExcel-content">
+        <span class="close" onclick="closeForm('addNewDataFromExcel')">&times;</span><br />
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Tên mặt hàng</th>
+                    <th>Loại mặt hàng</th>
+                    <th>Ngày sản xuất</th>
+                    <th>Hạn sử dụng</th>
+                    <th>Đơn vị tính</th>
+                    <th>Tối thiểu</th>
+                    <th>Số lượng trong kho</th>
+                    <th>Mô tả</th>
+                </tr>
+            </thead>
+            <tbody id="dataBody">
+                <!-- Dữ liệu sẽ được thêm vào đây -->
+            </tbody>
+        </table>
+        <button onclick="acceptAdd()" id="btnSubmit">Thêm vào kho</button>
+    </div>
+</div>
+
+<div id="tableDetailModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeForm('tableDetailModal')">&times;</span>
+        <div id="tableDetailContent">
+            <!-- Thông tin chi tiết của bàn và danh sách món ăn sẽ được thêm vào đây -->
+        </div>
+    </div>
+</div>
+<!--Updated Detail-->
+<div class="updateDetail" id="updateDetail">
+    <form class="update-detail" id="update-detail">
+        <input hidden id="inputKey" />
+        <label for="productName">Tên sản phẩm:</label>
+        <input type="text" id="productName" name="productName" required><br>
+
+        <label for="productType">Loại mặt hàng:</label>
+        <select id="productType" name="productType" required>
+            <option value="Vegetables and Fruits">Rau củ</option>
+            <option value="Meat">Thịt</option>
+            <option value="Spices and Condiments">Gia vị</option>
+            <option value="Cooking Utensils and Tools">Dụng cụ nấu ăn</option>
+        </select><br>
+
+        <label for="manufacturingDate">Ngày sản xuất:</label>
+        <input type="datetime-local" id="manufacturingDate" name="manufacturingDate" required><br>
+
+        <label for="expiryDate">Ngày hết hạn:</label>
+        <input type="datetime-local" id="expiryDate" name="expiryDate" required><br>
+
+        <label for="unit">Đơn vị tính:</label>
+        <input type="text" id="unit" name="unit" required><br>
+
+        <label for="minQuantity">Số lượng tối thiểu:</label>
+        <input type="number" id="minQuantity" name="minQuantity" required><br>
+
+        <label for="quantityInStock">Số lượng trong kho:</label>
+        <input type="number" id="quantityInStock" name="quantityInStock" readonly><br>
+
+        <label for="description">Mô tả:</label>
+        <textarea id="description" name="description" rows="5" cols="50" required></textarea><br>
+
+        <input type="button" class="confirm-button" value="Xác Nhận" onclick="confirmUpdate()">
+        <input type="button" class="cancel-button" value="Hủy" onclick="closeForm('updateDetail')">
+    </form>
+</div>
+<!--Kiểm tra kho hàng-->
+<div id="checkItem">
+    <div class="checkItem-content">
+        <div class="checkItem-user">
+            <h4>Thông tin của nhân viên quản lý</h4>
+            <input hidden id="userKey" />
+            <p>Tên nhân viên: <span id="userName"></span></p>
+            <p>Ngày</p>
+        </div>
+        <div class="checkItem-storage">
+            <span class="close" onclick="closeForm('checkItem')">&times;</span><br />
+            <table id="checkItemTable">
+                <thead>
+                    <tr>
+                        <th>Mã món</th>
+                        <th>Tên</th>
+                        <th>Số lượng tồn kho</th>
+                        <th>Số lượng hỏng</th>
+                        <th style="display: none;">Số lượng ban đầu</th>
+                    </tr>
+                </thead>
+                <tbody id="checkItemBody">
+                    <!-- Dữ liệu sẽ được thêm vào đây -->
+                </tbody>
+            </table>
+            <button id="btnSubmit" onclick="acceptCheckItem()">Xác nhận</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-actions {
+        margin-bottom: 20px;
+    }
+
+    .table-actions button {
+        padding: 8px 16px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+    }
+
+    .table-actions button:hover {
+        background-color: #0056b3;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    td button {
+        padding: 6px 10px;
+        margin-right: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 14px;
+    }
+
+    td button:hover {
+        background-color: #45a049;
+    }
+
+    .need-replenish {
+        background-color: #ffcccc; /* Màu nền cho hàng cần phải nhập thêm */
+    }
+    /*Add dữ liệu*/
+    #addNewDataFromExcel {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .addNewDataFromExcel-content {
+        background-color: #fefefe;
+        top: 100px;
+        margin: auto;
+        top: 100px;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%; /* Điều chỉnh kích thước chiều rộng */
+        border-radius: 8px;
+        position: relative;
+    }
+
+    /*Detail*/
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        top: 100px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        max-width: 600px; /* Giới hạn kích thước tối đa */
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+    }
+
+    #tableDetailContent {
+        max-width: 100%;
+        display: block;
+    }
+
+    /*UpdateDetail*/
+    .updateDetail {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .update-detail {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 100px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        max-width: 600px; /* Giới hạn kích thước tối đa */
+        border-radius: 8px;
+        position: relative; /* Đảm bảo modal hiển thị trên sidebar */
+    }
+
+    .update-detail label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    textarea,
+    select,
+    .update-detail input[type="text"],
+    .update-detail input[type="number"],
+    .update-detail input[type="datetime-local"] {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .update-detail .confirm-button {
+        width: calc(50% - 10px);
+        padding: 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    .update-detail .cancel-button {
+        width: calc(50% - 10px);
+        padding: 10px;
+        background-color: #FF5733;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    .update-detail .confirm-button:hover,
+    .update-detail .cancel-button:hover {
+        opacity: 1;
+    }
+    /*checkItem*/
+    #checkItem {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4); /* Tạo hiệu ứng mờ nền */
+    }
+
+    .checkItem-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        top: 100px;
+        left: 50px;
+        border: 1px solid #888;
+        width: 75%; /* Điều chỉnh kích thước chiều rộng */
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .checkItem-storage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #btnSubmit {
+        width: calc(10% - 10px);
+        padding: 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    #btnSubmit:hover {
+        opacity: 1;
+    }
+</style>
+
+<script type="module" src="~/Scripts/js/firebase/firebaseHelper.js"></script>
+<script type="module" src="~/Scripts/js/firebase/storageManagement.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
