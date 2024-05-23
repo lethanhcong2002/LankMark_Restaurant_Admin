@@ -12,3 +12,9 @@
 ![nhanban](https://github.com/lethanhcong2002/LankMark_Restaurant_Admin/assets/150000453/c30af467-e8a6-473a-ace8-ec5241a01644)
 # Giao diện trang gọi món
 ![goimon](https://github.com/lethanhcong2002/LankMark_Restaurant_Admin/assets/150000453/a9e67a5e-da67-4637-ac01-5b3fff00dccf)
++ Giao diện gọi món cho từng hóa đơn khách hàng
+![goimonchohoadon](https://github.com/lethanhcong2002/LankMark_Restaurant_Admin/assets/150000453/3f9c6c39-65c3-47a6-9a19-e5da33616155)
++ Giao diện xem chi tiết hóa đơn
+![chitiethoadon](https://github.com/lethanhcong2002/LankMark_Restaurant_Admin/assets/150000453/8236d509-1171-4967-89ce-671550d50cb4)
++ Giao diện thanh toán
+![thanhtoan](https://github.com/lethanhcong2002/LankMark_Restaurant_Admin/assets/150000453/43104b77-d3ea-4302-b470-dca9a8e58a00)
